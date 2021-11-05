@@ -5,30 +5,30 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+        ConnectionArduino connectionArduino = new ConnectionArduino("/dev/ttyUSB0",
+                9600, 8, 1);
+        SerialPort sp = connectionArduino.createSerialPort();
         Scanner sc = new Scanner(System.in);
-        SerialPort serialPort = new SerialPort("/dev/ttyUSB0");
+
 
         try {
-            serialPort.openPort();
-
-            System.out.println("Соединение : " + serialPort.isOpened());
-            Thread.sleep(5000);
-            serialPort.setParams(9600, 8, 1, SerialPort.PARITY_NONE);
 
             label_1:
             while (sc.hasNext()) {
                 String s = sc.nextLine();
                 switch (s) {
                     case "on":
-                        serialPort.writeString("1");
+                        sp.writeString("1");
+                        //serialPort.writeString("1");
                         break;
                     case "off":
-                        serialPort.writeString("0");
+                        sp.writeString("0");
+                        //serialPort.writeString("0");
                         break;
 
                     case "exit":
-                        serialPort.writeString("0");
-                        serialPort.closePort();
+                        sp.writeString("0");
+                        sp.closePort();
                         break label_1;
                     default:
                         System.out.println(s + " не является командой");
@@ -38,10 +38,7 @@ public class Main {
 
         } catch (SerialPortException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-
 
     }
 }
