@@ -1,29 +1,34 @@
 import jssc.*;
 
+import java.io.IOException;
 import java.util.Scanner;
+/* проверить настройки портов,хоста и т.д.*/
 
 public class Main {
 
     public static void main(String[] args) {
-        ConnectionArduino connectionArduino = new ConnectionArduino("/dev/ttyUSB0",
+        String portNameUbuntu = "/dev/ttyUSB0";     // Физические порты для
+        String portNameWindows = "COM3";            //   подключения Arduino
+        String hostClient = "localhost";            // Настройки host и port для
+        int portClient = 5000;                      //  поключения сервера
+
+
+        ConnectionArduino connectionArduino = new ConnectionArduino(portNameWindows,
                 9600, 8, 1);
         SerialPort sp = connectionArduino.createSerialPort();
-        Scanner sc = new Scanner(System.in);
-
+        ClientArduino clientArduino = new ClientArduino(hostClient, portClient);
 
         try {
+            String sc = clientArduino.CreateClient();
 
             label_1:
-            while (sc.hasNext()) {
-                String s = sc.nextLine();
-                switch (s) {
+            while (true) {
+                switch (sc) {
                     case "on":
                         sp.writeString("1");
-                        //serialPort.writeString("1");
                         break;
                     case "off":
                         sp.writeString("0");
-                        //serialPort.writeString("0");
                         break;
 
                     case "exit":
@@ -31,14 +36,17 @@ public class Main {
                         sp.closePort();
                         break label_1;
                     default:
-                        System.out.println(s + " не является командой");
+                        System.out.println(sc + " не является командой");
                         break;
                 }
             }
 
         } catch (SerialPortException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
 
     }
 }

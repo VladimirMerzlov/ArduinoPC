@@ -1,5 +1,4 @@
-import jssc.SerialPort;
-import jssc.SerialPortException;
+import jssc.*;
 
 public class ConnectionArduino {
 
