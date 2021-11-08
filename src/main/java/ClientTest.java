@@ -3,40 +3,46 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ClientTest {
+
     public static void main(String[] args) {
-        String message = "Client is ready...";
-
+        String host = "192.168.3.3";
+        String hostlocal = "localhost";
+        int port = 5001;
         try {
-            Socket socket = new Socket("localhost", 5000);
-            System.out.println(message);
+            String exit = "exit";
+            System.out.println("<<< Client is ready >>>");
+            Socket socket = new Socket(host, port);
 
-            BufferedWriter outMessage = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            outMessage.write(message + "\n");
-            outMessage.flush();
-           // outMessage.close();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 
             while (true) {
-                if (in.readLine().equals("exit")) {
-                    in.close();
-                    System.out.println("Client is over...");
-                    break;
+                System.out.println(" [Enter text] : ");
+                StringBuffer sb = new StringBuffer(console.readLine());
 
-                } else {
-                    System.out.println(in.readLine());
+
+                if (sb.equals(exit) ) {
+                    System.out.println("Left the chat");
+                    socket.close();
+                    writer.close();
+
+                    console.close();
+                    break;
+                }else{
+                    writer.write(sb + "\n");
+                    writer.flush();
+//                    System.out.println(reader.readLine());
 
                 }
 
             }
 
-//            socket.close();
-            System.out.println("exit");
-        } catch (UnknownHostException unknownHostException) {
-            unknownHostException.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
 
     }
 
