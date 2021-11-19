@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class ServerArduino {
 
     public static void main(String[] args) throws IOException {
-
+        String exit = "exit";
         ServerSocket serverSocket = new ServerSocket(5000);
         System.out.println("Server is ready...");
 
@@ -24,25 +24,27 @@ public class ServerArduino {
             System.out.println("Enter the command : ");
             Scanner commandToClient = new Scanner(System.in);
             //BufferedReader commandToClient = new BufferedReader(new InputStreamReader(System.in));
-            StringBuffer sb = new StringBuffer(commandToClient.nextLine());
+            String sb = commandToClient.nextLine();
             System.out.println(sb);
 
-            if (sb.equals("exit")) {
+            if (sb.equals(exit)) {
                 System.out.println(sb + " exit ");
                 outServer.write(sb + "\n");
                 outServer.flush();
+                System.out.println("Server is over...");
 
                 outServer.close();
                 inServer.close();
                 clientSocket.close();
                 serverSocket.close();
-                System.out.println("Server is over...");
                 break label_2;
-            }
-            System.out.println(sb + " onOff");
-            outServer.write(sb + "\n");
-            // outServer.flush();
+            } else {
 
+                outServer.write(sb + "\n");
+                System.out.println(sb + " on/Off");
+                System.out.println(sb.equals(exit));
+                // outServer.flush();
+            }
 
         }
 
