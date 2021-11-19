@@ -5,9 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MultiThreadServer {
+
+    private static int portServer = 5000; // Номер порта сервера
+
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(5000);
+            ServerSocket serverSocket = new ServerSocket(portServer);
             System.out.println(" <<< Server is ready >>> ");
 
              while(true){
